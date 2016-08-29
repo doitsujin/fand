@@ -1,0 +1,131 @@
+fand - a fan controlling daemon
+===============================
+
+RUNNING
+=======
+
+Run, as root:
+# fand /path/to/your/config.conf
+
+
+CONFIGURATION
+=============
+
+Configuration files are using a simple yet powerful
+LISP-like syntax which allows sensor values to be
+manipulated in many ways.
+
+Below a small example of what a configuration file
+may look like when controlling only the CPU fan.
+
+
+  (sensor "cputemp" (hwmon-sensor "hwmon1" "temp1_input"))
+  
+  (fan "cpufan" (hwmon-pwm "hwmon2" "pwm1"))
+
+  (output "cpufan"
+    (maximum
+      (panic "45" "50" (sensor-input "cputemp"))
+      (smooth "10"
+        (steps
+          (step "30" "0.00")
+          (step "45" "0.65")
+          (sensor-input "cputemp")))))
+
+
+Sensor readings are given in celsius (as opposed
+to milli celsius in sysfs), and fan speeds are
+given as a floating-point number between 0 and 1.
+
+Sensors and fans are named. Sensors can be used
+as inputs multiple times using the 'sensor-input'
+tag, whereas fans should only be used once.
+
+In order to test your configuration prior to actually
+applying it, you can choose to display fan speeds -
+again, given as a floating point number between 0 and
+1 - on the console. To do that, modify the fan entry:
+
+  (fan "cpufan" (console-fan "PWM 1"))
+
+where "PWM 1" is the display name of that fan.
+
+The 'output' tag links an input to a fan, meaning that
+this is what will actually control fan speeds. The first
+argument is a named fan, 'cpufan' in our example, whereas
+the second argument is an input sequence that produces a
+number. Numbers outside the range [0..1] will be cut off.
+
+There are the following input sources and modifiers:
+
+  - (sensor-input "sensor")
+      Reads the value of a named temperature sensor,
+      in degrees celsius.
+  - (steps (step "a1" "b1") (step "a2" "b2") ... (input))
+      Maps an input to a different range, preferably the
+      [0..1] range. If the number produced by the given
+      input is between a1 and b2, the resulting value will
+      be between b1 and b2.
+  - (smooth "n" (input))
+      Makes the resulting fan curve smooth by computing the
+      average of the previous "n" values.
+  - (panic "target" "critical" (input))
+      Returns 1.0 (full fan speed) when the input temperature
+      exceeds the "critical" temperature, and 0.0 (fan off)
+      when it drops below the "target" temperature. Most useful
+      in combination with (maximum).
+  - (maximum (input1) (input2) ...)
+      Computes the maximum value of all the inputs given.
+  - (cutoff "off-below" "start-above" "start-value" (input))
+      Turns the fans off when the input temperature drops
+      below the "off-below" value, and starts them when
+      it rises above the "start-above" value. "start-value"
+      is the fan speed used to start the fans, which might
+      have to be much higher than the minimum rotation speed.
+
+Below another full configuration example:
+
+
+  (sensor "gpu"  (hwmon-sensor "hwmon0" "temp1_input"))
+  (sensor "cpu"  (hwmon-sensor "hwmon1" "temp1_input"))
+  (sensor "sock" (hwmon-sensor "hwmon2" "temp1_input"))
+  (sensor "case" (hwmon-sensor "hwmon2" "temp2_input"))
+
+  (fan "cpu"  (hwmon-pwm "hwmon2" "pwm1"))
+  (fan "case" (hwmon-pwm "hwmon2" "pwm3"))
+
+  (output "cpu"
+    (maximum
+      (panic "60" "65" (sensor-input "cpu"))
+      (smooth "7"
+        (steps
+          (step "45" "0.00")
+          (step "60" "0.65")
+          (sensor-input "cpu")))))
+
+  (output "case"
+    (cutoff "0.19" "0.25" "0.4"
+      (maximum
+        (panic "80" "82" (sensor-input "gpu"))
+        (panic "48" "52" (sensor-input "case"))
+        (panic "65" "70" (sensor-input "sock"))
+        (smooth "10"
+          (maximum
+            (steps
+              (step "50" "0.00")
+              (step "50" "0.19")
+              (step "55" "0.25")
+              (step "80" "0.75")
+              (sensor-input "gpu"))
+            (steps
+              (step "38" "0.00")
+              (step "38" "0.19")
+              (step "40" "0.25")
+              (step "48" "0.60")
+              (step "50" "0.75")
+              (sensor-input "case"))
+            (steps
+              (step "40" "0.19")
+              (step "50" "0.25")
+              (step "65" "0.75")
+              (sensor-input "sock")))))))
