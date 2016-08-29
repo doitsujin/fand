@@ -1,0 +1,49 @@
+use input::Input;
+use sensor::Sensor;
+
+use sensor::evaluator::NamedSensors;
+use parser::{ Evaluator, Node };
+use util;
+
+use std::cell::RefCell;
+use std::rc::Rc;
+
+// Sensor input
+pub struct SensorInput {
+  sensor : Rc<RefCell<Box<Sensor>>>,
+}
+
+impl SensorInput {
+  pub fn create(sensor_v: Rc<RefCell<Box<Sensor>>>) -> Box<Input> {
+    Box::new(SensorInput { sensor : sensor_v })
+  }
+}
+
+impl Input for SensorInput {
+  fn compute(&mut self) -> f64 {
+    self.sensor.borrow().value()
+  }
+}
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+
+pub struct EvalSensorInput {
+  named_sensors: Rc<RefCell<NamedSensors>>,
+}
+
+impl EvalSensorInput {
+  pub fn new(named_sensors_v: Rc<RefCell<NamedSensors>>) -> EvalSensorInput {
+    EvalSensorInput { named_sensors : named_sensors_v }
+  }
+}
+
+impl Evaluator<Box<Input>> for EvalSensorInput {
+  fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Input>, String> {
+    let sensor_name   = try!(util::get_text_node("sensor-input", nodes, 0));
+    let named_sensors = self.named_sensors.borrow();
+    let sensor        = try!(named_sensors.get(sensor_name).ok_or(
+                          format!("No such sensor: {}", sensor_name)));
+    Ok(SensorInput::create(sensor.clone()))
+  }
+}
