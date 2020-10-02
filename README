@@ -1,4 +1,4 @@
-fand - a fan controlling daemon
+fand - a fan controlling demon
 ===============================
 
 RUNNING
@@ -11,13 +11,12 @@ Run, as root:
 CONFIGURATION
 =============
 
-Configuration files are using a simple yet powerful
-LISP-like syntax which allows sensor values to be
-manipulated in many ways.
+They use configuration files simply but powerfully
+LISP-like syntax that allows sensor values to be
+in several ways.
 
-Below a small example of what a configuration file
-may look like when controlling only the CPU fan.
-
+Below is a small example of a configuration file
+may look like CPU fan control only.
 
   (sensor "cputemp" (hwmon-sensor "hwmon1" "temp1_input"))
   
@@ -33,28 +32,28 @@ may look like when controlling only the CPU fan.
           (sensor-input "cputemp")))))
 
 
-Sensor readings are given in celsius (as opposed
-to milli celsius in sysfs), and fan speeds are
-given as a floating-point number between 0 and 1.
+Sensor readings are given in Celsius (as opposed to
+to miles Celsius in sysfs) and fan speeds
+given as a floating point number between 0 and 1.
 
-Sensors and fans are named. Sensors can be used
-as inputs multiple times using the 'sensor-input'
-tag, whereas fans should only be used once.
+They are called sensors and fans. Sensors can be used
+as inputs multiple times using the sensor input
+label, while fans only need to be used once.
 
-In order to test your configuration prior to actually
-applying it, you can choose to display fan speeds -
-again, given as a floating point number between 0 and
-1 - on the console. To do that, modify the fan entry:
+To be able to actually test your configuration beforehand
+if you use it, you can choose to display the fan speed -
+again given as a floating point number between 0 and
+1 - on the console. To do this, change the fan entry:
 
   (fan "cpufan" (console-fan "PWM 1"))
 
-where "PWM 1" is the display name of that fan.
+where "PWM 1" is the display name of this fan.
 
-The 'output' tag links an input to a fan, meaning that
-this is what will actually control fan speeds. The first
-argument is a named fan, 'cpufan' in our example, whereas
-the second argument is an input sequence that produces a
-number. Numbers outside the range [0..1] will be cut off.
+The 'output' label connects the input to the fan, which means that
+this is what will actually control the fan speed. The first
+the argument is called a fan, in our case ‘cpufan’, while
+the second argument is the input sequence that generates a
+number. Numbers outside the range [0..1] will be truncated.
 
 There are the following input sources and modifiers:
 
