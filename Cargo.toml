@@ -1,5 +1,5 @@
 [package]
 name = "fand"
-version = "0.0.1"
-authors = ["Philip Rebohle <philip.rebohle@tu-dortmund.de>"]
+version = "0.0.2"
+authors = ["Philip Rebohle <philip.rebohle@tu-dortmund.de>", "proegssilb <proegssilb@gmail.com"]
 edition = "2015"
