@@ -1,4 +1,3 @@
-use std::error::Error;
 use std::fs::File;
 use std::io::{self, Read, Write};
 use std::path::Path;
@@ -18,7 +17,7 @@ fn write_text_file_internal(path: &Path, content: &str) -> io::Result<()> {
 
 // Maps IO error to human-readable error
 pub fn map_io_error<T>(e: io::Result<T>) -> Result<T, String> {
-    e.map_err(|e| e.description().to_string())
+    e.map_err(|e| e.to_string())
 }
 
 // Convenience method to read from a text file
