@@ -14,7 +14,7 @@ use crate::input::step::EvalSteps;
 
 // Reference to input evaluator
 pub type InputEvaluatorRef = Rc<RefCell<InputEvaluator>>;
-pub type InputEvaluator = TagEvaluator<Box<Input>>;
+pub type InputEvaluator = TagEvaluator<Box<dyn Input>>;
 
 impl InputEvaluator {
     pub fn create(named_sensors: Rc<RefCell<NamedSensors>>) -> InputEvaluatorRef {

@@ -6,7 +6,7 @@ use crate::util;
 
 // Smoother
 pub struct Smooth {
-    input: Box<Input>,
+    input: Box<dyn Input>,
     values: Vec<f64>,
     samples: usize,
     index: usize,
@@ -16,7 +16,7 @@ pub struct Smooth {
 }
 
 impl Smooth {
-    pub fn create(samples_v: usize, input_v: Box<Input>) -> Box<Input> {
+    pub fn create(samples_v: usize, input_v: Box<dyn Input>) -> Box<dyn Input> {
         let mut values_v: Vec<f64> = Vec::new();
         values_v.resize(samples_v, 0.0);
         Box::new(Smooth {
@@ -72,8 +72,8 @@ impl EvalSmooth {
     }
 }
 
-impl Evaluator<Box<Input>> for EvalSmooth {
-    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Input>, String> {
+impl Evaluator<Box<dyn Input>> for EvalSmooth {
+    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<dyn Input>, String> {
         Ok(Smooth::create(
             util::get_num_node::<usize>("smooth", nodes, 0)?,
             self.input

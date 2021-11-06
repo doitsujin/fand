@@ -16,7 +16,7 @@ pub struct HwmonPwmFan {
 }
 
 impl HwmonPwmFan {
-    pub fn create(hwmon: &str, output: &str) -> Box<Fan> {
+    pub fn create(hwmon: &str, output: &str) -> Box<dyn Fan> {
         let base_path_pwm = format!("/sys/class/hwmon/{}/{}", hwmon, output);
         let base_path_enable = format!("{}_enable", &base_path_pwm);
 
@@ -60,8 +60,8 @@ impl EvalHwmonPwmFan {
     }
 }
 
-impl Evaluator<Box<Fan>> for EvalHwmonPwmFan {
-    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Fan>, String> {
+impl Evaluator<Box<dyn Fan>> for EvalHwmonPwmFan {
+    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<dyn Fan>, String> {
         Ok(HwmonPwmFan::create(
             util::get_text_node("hwmon-pwm", nodes, 0)?,
             util::get_text_node("hwmon-pwm", nodes, 1)?,

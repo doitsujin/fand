@@ -3,7 +3,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 pub struct SensorCollection {
-    sensors: Vec<Rc<RefCell<Box<Sensor>>>>,
+    sensors: Vec<Rc<RefCell<Box<dyn Sensor>>>>,
 }
 
 impl SensorCollection {
@@ -15,7 +15,7 @@ impl SensorCollection {
     }
 
     // Adds a sensor to the collection
-    pub fn add(&mut self, sensor: Rc<RefCell<Box<Sensor>>>) {
+    pub fn add(&mut self, sensor: Rc<RefCell<Box<dyn Sensor>>>) {
         self.sensors.push(sensor);
     }
 

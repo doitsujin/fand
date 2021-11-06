@@ -15,7 +15,7 @@ pub trait Evaluator<T> {
 // Fowards nodes to a given parser, depending on
 // the node name. Text nodes will cause errors.
 pub struct TagEvaluator<T> {
-    parsers: HashMap<String, Rc<Evaluator<T>>>,
+    parsers: HashMap<String, Rc<dyn Evaluator<T>>>,
 }
 
 impl<T> TagEvaluator<T> {
@@ -26,7 +26,7 @@ impl<T> TagEvaluator<T> {
     }
 
     // Adds named evaluator
-    pub fn add(&mut self, s: &str, p: Rc<Evaluator<T>>) {
+    pub fn add(&mut self, s: &str, p: Rc<dyn Evaluator<T>>) {
         self.parsers.insert(s.to_string(), p);
     }
 

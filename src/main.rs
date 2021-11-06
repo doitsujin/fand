@@ -20,7 +20,7 @@ fn global_config_path() -> Result<String, String> {
 
 fn run_app() -> Result<(), String> {
     let config_path = global_config_path()?;
-    let content = util::read_text_file(&Path::new(&config_path))?;
+    let content = util::read_text_file(Path::new(&config_path))?;
 
     let config = Parser::parse_document(&content)?;
     let mut app = App::from_config(Config::parse(&config)?);

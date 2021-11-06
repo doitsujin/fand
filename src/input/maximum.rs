@@ -8,11 +8,11 @@ use crate::parser::{Evaluator, Node};
 // Examines a bunch of inputs and takes the
 // highest value.
 pub struct Maximum {
-    inputs: Vec<Box<Input>>,
+    inputs: Vec<Box<dyn Input>>,
 }
 
 impl Maximum {
-    pub fn create(inputs_v: Vec<Box<Input>>) -> Box<Input> {
+    pub fn create(inputs_v: Vec<Box<dyn Input>>) -> Box<dyn Input> {
         Box::new(Maximum { inputs: inputs_v })
     }
 
@@ -47,8 +47,8 @@ impl EvalMaximum {
     }
 }
 
-impl Evaluator<Box<Input>> for EvalMaximum {
-    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Input>, String> {
+impl Evaluator<Box<dyn Input>> for EvalMaximum {
+    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<dyn Input>, String> {
         Ok(Maximum::create(self.input.borrow().parse_nodes(nodes)?))
     }
 }

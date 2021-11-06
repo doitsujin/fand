@@ -12,7 +12,7 @@ pub struct Step {
 
 // Step sequence
 pub struct Steps {
-    input: Box<Input>,
+    input: Box<dyn Input>,
     steps: Vec<Step>,
 }
 
@@ -39,7 +39,7 @@ impl Step {
 }
 
 impl Steps {
-    pub fn create(steps_v: Vec<Step>, input_v: Box<Input>) -> Box<Input> {
+    pub fn create(steps_v: Vec<Step>, input_v: Box<dyn Input>) -> Box<dyn Input> {
         Box::new(Steps {
             input: input_v,
             steps: steps_v,
@@ -90,9 +90,9 @@ impl EvalSteps {
     }
 }
 
-impl Evaluator<Box<Input>> for EvalSteps {
-    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Input>, String> {
-        let mut input: Option<Box<Input>> = None;
+impl Evaluator<Box<dyn Input>> for EvalSteps {
+    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<dyn Input>, String> {
+        let mut input: Option<Box<dyn Input>> = None;
         let mut steps: Vec<Step> = Vec::new();
 
         for n in nodes {

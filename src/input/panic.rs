@@ -10,14 +10,14 @@ use crate::util;
 // condition is met. Otherwise, returns zero so
 // that this can be used with the accumulators.
 pub struct Panic {
-    input: Box<Input>,
+    input: Box<dyn Input>,
     temp_target: f64,
     temp_critical: f64,
     is_panicked: bool,
 }
 
 impl Panic {
-    pub fn create(temp_target_v: f64, temp_critical_v: f64, input_v: Box<Input>) -> Box<Input> {
+    pub fn create(temp_target_v: f64, temp_critical_v: f64, input_v: Box<dyn Input>) -> Box<dyn Input> {
         Box::new(Panic {
             input: input_v,
             temp_target: temp_target_v,
@@ -52,8 +52,8 @@ impl EvalPanic {
     }
 }
 
-impl Evaluator<Box<Input>> for EvalPanic {
-    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Input>, String> {
+impl Evaluator<Box<dyn Input>> for EvalPanic {
+    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<dyn Input>, String> {
         Ok(Panic::create(
             util::get_num_node::<f64>("panic", nodes, 0)?,
             util::get_num_node::<f64>("panic", nodes, 1)?,

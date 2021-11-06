@@ -14,7 +14,7 @@ pub struct ConsoleFan {
 }
 
 impl ConsoleFan {
-    pub fn create(name_v: &str) -> Box<Fan> {
+    pub fn create(name_v: &str) -> Box<dyn Fan> {
         Box::new(ConsoleFan {
             name: name_v.to_string(),
         })
@@ -42,8 +42,8 @@ impl EvalConsoleFan {
     }
 }
 
-impl Evaluator<Box<Fan>> for EvalConsoleFan {
-    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Fan>, String> {
+impl Evaluator<Box<dyn Fan>> for EvalConsoleFan {
+    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<dyn Fan>, String> {
         Ok(ConsoleFan::create(util::get_text_node(
             "console-fan",
             nodes,

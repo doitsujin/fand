@@ -10,11 +10,11 @@ use std::rc::Rc;
 
 // Sensor input
 pub struct SensorInput {
-    sensor: Rc<RefCell<Box<Sensor>>>,
+    sensor: Rc<RefCell<Box<dyn Sensor>>>,
 }
 
 impl SensorInput {
-    pub fn create(sensor_v: Rc<RefCell<Box<Sensor>>>) -> Box<Input> {
+    pub fn create(sensor_v: Rc<RefCell<Box<dyn Sensor>>>) -> Box<dyn Input> {
         Box::new(SensorInput { sensor: sensor_v })
     }
 }
@@ -40,8 +40,8 @@ impl EvalSensorInput {
     }
 }
 
-impl Evaluator<Box<Input>> for EvalSensorInput {
-    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Input>, String> {
+impl Evaluator<Box<dyn Input>> for EvalSensorInput {
+    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<dyn Input>, String> {
         let sensor_name = util::get_text_node("sensor-input", nodes, 0)?;
         let named_sensors = self.named_sensors.borrow();
         let sensor = named_sensors

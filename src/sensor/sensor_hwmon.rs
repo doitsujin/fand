@@ -18,7 +18,7 @@ pub struct HwmonSensor {
 }
 
 impl HwmonSensor {
-    pub fn create(hwmon: &str, input: &str) -> Rc<RefCell<Box<Sensor>>> {
+    pub fn create(hwmon: &str, input: &str) -> Rc<RefCell<Box<dyn Sensor>>> {
         let base_path = format!("/sys/class/hwmon/{}/{}", hwmon, input);
 
         let mut path_v = PathBuf::new();
@@ -32,7 +32,7 @@ impl HwmonSensor {
 
     fn pass_char(&self, c: char) -> bool {
         match c {
-            '0'...'9' | '-' => true,
+            '0'..='9' | '-' => true,
             _ => false,
         }
     }
@@ -69,8 +69,8 @@ impl EvalHwmonSensor {
     }
 }
 
-impl Evaluator<Rc<RefCell<Box<Sensor>>>> for EvalHwmonSensor {
-    fn parse_nodes(&self, nodes: &[Node]) -> Result<Rc<RefCell<Box<Sensor>>>, String> {
+impl Evaluator<Rc<RefCell<Box<dyn Sensor>>>> for EvalHwmonSensor {
+    fn parse_nodes(&self, nodes: &[Node]) -> Result<Rc<RefCell<Box<dyn Sensor>>>, String> {
         Ok(HwmonSensor::create(
             util::get_text_node("hwmon-sensor", nodes, 0)?,
             util::get_text_node("hwmon-sensor", nodes, 1)?,

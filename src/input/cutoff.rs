@@ -10,7 +10,7 @@ use crate::util;
 // and starts the fans once the target speed
 // exceeds a given value.
 pub struct Cutoff {
-    input: Box<Input>,
+    input: Box<dyn Input>,
     stop_below: f64,
     start_above: f64,
     start_value: f64,
@@ -22,8 +22,8 @@ impl Cutoff {
         stop_below_v: f64,
         start_above_v: f64,
         start_value_v: f64,
-        input_v: Box<Input>,
-    ) -> Box<Input> {
+        input_v: Box<dyn Input>,
+    ) -> Box<dyn Input> {
         Box::new(Cutoff {
             input: input_v,
             stop_below: stop_below_v,
@@ -71,8 +71,8 @@ impl EvalCutoff {
     }
 }
 
-impl Evaluator<Box<Input>> for EvalCutoff {
-    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Input>, String> {
+impl Evaluator<Box<dyn Input>> for EvalCutoff {
+    fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<dyn Input>, String> {
         Ok(Cutoff::create(
             util::get_num_node::<f64>("cutoff", nodes, 0)?,
             util::get_num_node::<f64>("cutoff", nodes, 1)?,
