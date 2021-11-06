@@ -2,3 +2,4 @@
 name = "fand"
 version = "0.0.1"
 authors = ["Philip Rebohle <philip.rebohle@tu-dortmund.de>"]
+edition = "2015"
