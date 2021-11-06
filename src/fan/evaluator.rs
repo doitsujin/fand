@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 use std::rc::Rc;
 
-use fan::Fan;
-use fan::fan_console::EvalConsoleFan;
-use fan::fan_hwmon_pwm::EvalHwmonPwmFan;
-use parser::{ Evaluator, Node, TagEvaluator };
-use util;
+use crate::fan::Fan;
+use crate::fan::fan_console::EvalConsoleFan;
+use crate::fan::fan_hwmon_pwm::EvalHwmonPwmFan;
+use crate::parser::{ Evaluator, Node, TagEvaluator };
+use crate::util;
 
 pub type NamedFans = HashMap<String, Box<Fan>>;
 
@@ -29,8 +29,8 @@ impl FanEvaluator {
 
 impl Evaluator<(String, Box<Fan>)> for FanEvaluator {
   fn parse_nodes(&self, nodes: &[Node]) -> Result<(String, Box<Fan>), String> {
-    let name = try!(util::get_text_node("fan", nodes, 0));
-    let node = try!(util::get_node     ("fan", nodes, 1));
-    Ok((name.clone(), try!(self.tag_evaluator.parse_node(node))))
+    let name = r#try!(util::get_text_node("fan", nodes, 0));
+    let node = r#try!(util::get_node     ("fan", nodes, 1));
+    Ok((name.clone(), r#try!(self.tag_evaluator.parse_node(node))))
   }
 }

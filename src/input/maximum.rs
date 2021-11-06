@@ -1,7 +1,7 @@
-use input::Input;
+use crate::input::Input;
 
-use input::evaluator::InputEvaluatorRef;
-use parser::{ Evaluator, Node };
+use crate::input::evaluator::InputEvaluatorRef;
+use crate::parser::{ Evaluator, Node };
 
 // Maximum accumulator
 // 
@@ -49,6 +49,6 @@ impl EvalMaximum {
 
 impl Evaluator<Box<Input>> for EvalMaximum {
   fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Input>, String> {
-    Ok(Maximum::create(try!(self.input.borrow().parse_nodes(nodes))))
+    Ok(Maximum::create(r#try!(self.input.borrow().parse_nodes(nodes))))
   }
 }

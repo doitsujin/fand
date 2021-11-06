@@ -1,5 +1,5 @@
 pub mod evaluator;
 pub mod parser;
 
-pub use parser::evaluator::{ Evaluator, TagEvaluator };
-pub use parser::parser::{ Node, Nodes, Parser };
+pub use crate::parser::evaluator::{ Evaluator, TagEvaluator };
+pub use crate::parser::parser::{ Node, Nodes, Parser };

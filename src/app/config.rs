@@ -1,12 +1,12 @@
-use output::OutputCollection;
-use sensor::SensorCollection;
+use crate::output::OutputCollection;
+use crate::sensor::SensorCollection;
 
-use fan::evaluator::{ NamedFans, FanEvaluator };
-use input::evaluator::InputEvaluator;
-use output::evaluator::OutputEvaluator;
-use sensor::evaluator::{ NamedSensors, SensorEvaluator };
+use crate::fan::evaluator::{ NamedFans, FanEvaluator };
+use crate::input::evaluator::InputEvaluator;
+use crate::output::evaluator::OutputEvaluator;
+use crate::sensor::evaluator::{ NamedSensors, SensorEvaluator };
 
-use parser::{ Evaluator, Node };
+use crate::parser::{ Evaluator, Node };
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -39,16 +39,16 @@ impl Config {
       match *n {
         Node::Node(ref s, ref nx) => match s.as_str() {
           "fan" => {
-            let (name, fan) = try!(fan_eval.parse_nodes(nx));
+            let (name, fan) = r#try!(fan_eval.parse_nodes(nx));
             named_fans.borrow_mut().insert(name, fan);
           },
           "sensor" => {
-            let (name, sensor) = try!(sensor_eval.parse_nodes(nx));
+            let (name, sensor) = r#try!(sensor_eval.parse_nodes(nx));
             named_sensors.borrow_mut().insert(name, sensor.clone());
             sensors.add(sensor);
           },
           "output" => {
-            outputs.add(try!(output_eval.parse_nodes(nx)));
+            outputs.add(r#try!(output_eval.parse_nodes(nx)));
           },
           _ => { return Err(format!("Invalid root node type: {}", s)); }
         },

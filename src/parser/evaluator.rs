@@ -1,4 +1,4 @@
-use parser::Node;
+use crate::parser::Node;
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -32,7 +32,7 @@ impl<T> TagEvaluator<T> {
   pub fn parse_node(&self, node: &Node) -> Result<T, String> {
     match *node {
       Node::Node(ref title, ref content)
-        => try!(self.parsers.get(title)
+        => r#try!(self.parsers.get(title)
             .ok_or(format!("Unknown node type: {}", title)))
             .parse_nodes(content),
       _ => Err("Expected node".to_string())
@@ -47,7 +47,7 @@ impl<T> Evaluator<Vec<T>> for TagEvaluator<T> {
   fn parse_nodes(&self, nodes: &[Node]) -> Result<Vec<T>, String> {
     let mut result : Vec<T> = Vec::new();
     for n in nodes.iter() {
-      result.push(try!(self.parse_node(n)));
+      result.push(r#try!(self.parse_node(n)));
     }
     Ok(result)
   }

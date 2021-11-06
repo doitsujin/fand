@@ -1,8 +1,8 @@
 use std::io::{ self, Write };
-use parser::{ Evaluator, Node };
+use crate::parser::{ Evaluator, Node };
 
-use fan::Fan;
-use util;
+use crate::fan::Fan;
+use crate::util;
 
 // Fan speed output on console
 // 
@@ -42,6 +42,6 @@ impl EvalConsoleFan {
 
 impl Evaluator<Box<Fan>> for EvalConsoleFan {
   fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Fan>, String> {
-    Ok(ConsoleFan::create(try!(util::get_text_node("console-fan", nodes, 0))))
+    Ok(ConsoleFan::create(r#try!(util::get_text_node("console-fan", nodes, 0))))
   }
 }

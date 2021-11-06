@@ -1,8 +1,8 @@
-use input::Input;
+use crate::input::Input;
 
-use input::evaluator::InputEvaluatorRef;
-use parser::{ Evaluator, Node };
-use util;
+use crate::input::evaluator::InputEvaluatorRef;
+use crate::parser::{ Evaluator, Node };
+use crate::util;
 
 // Smoother
 pub struct Smooth {
@@ -75,8 +75,8 @@ impl EvalSmooth {
 impl Evaluator<Box<Input>> for EvalSmooth {
   fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Input>, String> {
     Ok(Smooth::create(
-      try!(util::get_num_node::<usize>("smooth", nodes, 0)),
-      try!(self.input.borrow().parse_node(
-        try!(util::get_node("smooth", nodes, 1))))))
+      r#try!(util::get_num_node::<usize>("smooth", nodes, 0)),
+      r#try!(self.input.borrow().parse_node(
+        r#try!(util::get_node("smooth", nodes, 1))))))
   }
 }

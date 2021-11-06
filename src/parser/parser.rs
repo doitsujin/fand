@@ -63,7 +63,7 @@ impl Parser {
     loop { match c {
       Some('"') | Some('(') => {
         // Parse the given node
-        let (node, p) = try!(Parser::parse_content((c, s)));
+        let (node, p) = r#try!(Parser::parse_content((c, s)));
         result.push(node);
         
         // Whitespace may occur after the end of our content
@@ -86,8 +86,8 @@ impl Parser {
   
   // Parses a single node, including its child nodes
   fn parse_node<'a>(p: CharPtr<'a>) -> Result<(Node, CharPtr<'a>)> {
-    let (name,  p1) = try!(Parser::parse_identifier(p));
-    let (nodes, p2) = try!(Parser::parse_nodes(p1));
+    let (name,  p1) = r#try!(Parser::parse_identifier(p));
+    let (nodes, p2) = r#try!(Parser::parse_nodes(p1));
     let (c, mut s)  = p2;
     match c {
       Some(')') => Ok((Node::Node(name, nodes), (s.next(), s))),
@@ -121,7 +121,7 @@ impl Parser {
       match c {
         None       => return Err("Expected \"".to_string()),
         Some('"')  => return Ok((Node::Text(result), (s.next(), s))),
-        Some('\\') => result.push(try!(s.next().ok_or("Expected character".to_string()))),
+        Some('\\') => result.push(r#try!(s.next().ok_or("Expected character".to_string()))),
         Some(c)    => result.push(c),
       }
       c = s.next();

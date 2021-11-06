@@ -1,11 +1,11 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use fan::evaluator::NamedFans;
-use input::evaluator::InputEvaluator;
-use parser::{ Evaluator, Node };
-use output::Output;
-use util;
+use crate::fan::evaluator::NamedFans;
+use crate::input::evaluator::InputEvaluator;
+use crate::parser::{ Evaluator, Node };
+use crate::output::Output;
+use crate::util;
 
 // Output evaluator
 pub struct OutputEvaluator {
@@ -25,11 +25,11 @@ impl OutputEvaluator {
 
 impl Evaluator<Output> for OutputEvaluator {
   fn parse_nodes(&self, nodes: &[Node]) -> Result<Output, String> {
-    let fan_name   = try!(util::get_text_node("output", nodes, 0));
-    let input_node = try!(util::get_node     ("output", nodes, 1));
+    let fan_name   = r#try!(util::get_text_node("output", nodes, 0));
+    let input_node = r#try!(util::get_node     ("output", nodes, 1));
     
     let mut named_fans  = self.named_fans.borrow_mut();
-    let fan = try!(named_fans.remove(fan_name).ok_or(format!("No such sensor: {}", fan_name)));
-    Ok(Output::new(fan, try!(self.input_evaluator.borrow().parse_node(input_node))))
+    let fan = r#try!(named_fans.remove(fan_name).ok_or(format!("No such sensor: {}", fan_name)));
+    Ok(Output::new(fan, r#try!(self.input_evaluator.borrow().parse_node(input_node))))
   }
 }

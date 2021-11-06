@@ -1,8 +1,8 @@
-use input::Input;
+use crate::input::Input;
 
-use input::evaluator::InputEvaluatorRef;
-use parser::{ Evaluator, Node };
-use util;
+use crate::input::evaluator::InputEvaluatorRef;
+use crate::parser::{ Evaluator, Node };
+use crate::util;
 
 // Panic
 // 
@@ -55,9 +55,9 @@ impl EvalPanic {
 impl Evaluator<Box<Input>> for EvalPanic {
   fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Input>, String> {
     Ok(Panic::create(
-      try!(util::get_num_node::<f64>("panic", nodes, 0)),
-      try!(util::get_num_node::<f64>("panic", nodes, 1)),
-      try!(self.input.borrow().parse_node(
-        try!(util::get_node("panic", nodes, 2))))))
+      r#try!(util::get_num_node::<f64>("panic", nodes, 0)),
+      r#try!(util::get_num_node::<f64>("panic", nodes, 1)),
+      r#try!(self.input.borrow().parse_node(
+        r#try!(util::get_node("panic", nodes, 2))))))
   }
 }

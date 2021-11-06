@@ -5,15 +5,15 @@ use std::io::{ self, Read, Write };
 
 fn read_text_file_internal(path: &Path) -> io::Result<String> {
   let mut content = String::new();
-  let mut file = try!(File::open(path));
-  try!(file.read_to_string(&mut content));
+  let mut file = r#try!(File::open(path));
+  r#try!(file.read_to_string(&mut content));
   Ok(content)
 }
 
 
 fn write_text_file_internal(path: &Path, content: &str) -> io::Result<()> {
-  let mut file = try!(File::create(path));
-  try!(write!(&mut file, "{}", content));
+  let mut file = r#try!(File::create(path));
+  r#try!(write!(&mut file, "{}", content));
   Ok(())
 }
 

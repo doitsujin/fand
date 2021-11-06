@@ -1,16 +1,16 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use input::Input;
-use parser::evaluator::TagEvaluator;
-use sensor::evaluator::NamedSensors;
+use crate::input::Input;
+use crate::parser::evaluator::TagEvaluator;
+use crate::sensor::evaluator::NamedSensors;
 
-use input::cutoff::EvalCutoff;
-use input::maximum::EvalMaximum;
-use input::panic::EvalPanic;
-use input::sensor::EvalSensorInput;
-use input::smooth::EvalSmooth;
-use input::step::EvalSteps;
+use crate::input::cutoff::EvalCutoff;
+use crate::input::maximum::EvalMaximum;
+use crate::input::panic::EvalPanic;
+use crate::input::sensor::EvalSensorInput;
+use crate::input::smooth::EvalSmooth;
+use crate::input::step::EvalSteps;
 
 // Reference to input evaluator
 pub type InputEvaluatorRef = Rc<RefCell<InputEvaluator>>;

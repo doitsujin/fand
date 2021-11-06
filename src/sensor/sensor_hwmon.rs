@@ -1,10 +1,10 @@
 use std::path::{ Path, PathBuf };
 use std::cell::RefCell;
 use std::rc::Rc;
-use parser::{ Evaluator, Node };
+use crate::parser::{ Evaluator, Node };
 
-use sensor::Sensor;
-use util;
+use crate::sensor::Sensor;
+use crate::util;
 
 // Hwmon sensor
 // 
@@ -48,12 +48,12 @@ impl Sensor for HwmonSensor {
   }
   
   fn update(&mut self) -> Result<(), String> {
-    let raw_str = try!(util::read_text_file(&self.path));
+    let raw_str = r#try!(util::read_text_file(&self.path));
     let val_str = raw_str.chars()
       .filter(|c| self.pass_char(*c))
       .collect::<String>();
     
-    let raw_value = try!(val_str.parse::<f64>().map_err(|_| "Invalid number".to_string()));
+    let raw_value = r#try!(val_str.parse::<f64>().map_err(|_| "Invalid number".to_string()));
     self.value = Some(raw_value / 1000.0);
     Ok(())
   }
@@ -74,7 +74,7 @@ impl EvalHwmonSensor {
 impl Evaluator<Rc<RefCell<Box<Sensor>>>> for EvalHwmonSensor {
   fn parse_nodes(&self, nodes: &[Node]) -> Result<Rc<RefCell<Box<Sensor>>>, String> {
     Ok(HwmonSensor::create(
-      try!(util::get_text_node("hwmon-sensor", nodes, 0)),
-      try!(util::get_text_node("hwmon-sensor", nodes, 1))))
+      r#try!(util::get_text_node("hwmon-sensor", nodes, 0)),
+      r#try!(util::get_text_node("hwmon-sensor", nodes, 1))))
   }
 }

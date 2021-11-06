@@ -1,9 +1,9 @@
-use input::Input;
-use sensor::Sensor;
+use crate::input::Input;
+use crate::sensor::Sensor;
 
-use sensor::evaluator::NamedSensors;
-use parser::{ Evaluator, Node };
-use util;
+use crate::sensor::evaluator::NamedSensors;
+use crate::parser::{ Evaluator, Node };
+use crate::util;
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -40,9 +40,9 @@ impl EvalSensorInput {
 
 impl Evaluator<Box<Input>> for EvalSensorInput {
   fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Input>, String> {
-    let sensor_name   = try!(util::get_text_node("sensor-input", nodes, 0));
+    let sensor_name   = r#try!(util::get_text_node("sensor-input", nodes, 0));
     let named_sensors = self.named_sensors.borrow();
-    let sensor        = try!(named_sensors.get(sensor_name).ok_or(
+    let sensor        = r#try!(named_sensors.get(sensor_name).ok_or(
                           format!("No such sensor: {}", sensor_name)));
     Ok(SensorInput::create(sensor.clone()))
   }

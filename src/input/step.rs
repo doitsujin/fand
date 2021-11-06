@@ -1,8 +1,8 @@
-use input::Input;
+use crate::input::Input;
 
-use input::evaluator::InputEvaluatorRef;
-use parser::{ Evaluator, Node };
-use util;
+use crate::input::evaluator::InputEvaluatorRef;
+use crate::parser::{ Evaluator, Node };
+use crate::util;
 
 // Step in a step sequence
 pub struct Step {
@@ -94,10 +94,10 @@ impl Evaluator<Box<Input>> for EvalSteps {
         Node::Node(ref s, ref nx) => {
           if s == "step" {
             steps.push(Step::new(
-              try!(util::get_num_node::<f64>("step", nx, 0)),
-              try!(util::get_num_node::<f64>("step", nx, 1))));
+              r#try!(util::get_num_node::<f64>("step", nx, 0)),
+              r#try!(util::get_num_node::<f64>("step", nx, 1))));
           } else if input.is_none() {
-            input = Some(try!(self.input.borrow().parse_node(n)));
+            input = Some(r#try!(self.input.borrow().parse_node(n)));
           } else {
             return Err(format!("(step): Unexpected node '{}'", s));
           }
@@ -107,7 +107,7 @@ impl Evaluator<Box<Input>> for EvalSteps {
     }
     
     // Create the actual step object
-    let input_node = try!(input.ok_or("(step): Missing input".to_string()));
+    let input_node = r#try!(input.ok_or("(step): Missing input".to_string()));
     Ok(Steps::create(steps, input_node))
   }
 }

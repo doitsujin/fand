@@ -1,4 +1,4 @@
-use sensor::Sensor;
+use crate::sensor::Sensor;
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -21,7 +21,7 @@ impl SensorCollection {
   // Updates all sensors
   pub fn update_all(&mut self) -> Result<(), String> {
     for s in self.sensors.as_mut_slice() {
-      try!(s.borrow_mut().update());
+      r#try!(s.borrow_mut().update());
     }
     Ok(())
   }

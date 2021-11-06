@@ -1,4 +1,4 @@
-use parser::Node;
+use crate::parser::Node;
 use std::str::FromStr;
 
 pub fn get_text_node<'a>(tag_name: &str, nodes: &'a [Node], id: usize) -> Result<&'a String, String> {
@@ -10,7 +10,7 @@ pub fn get_text_node<'a>(tag_name: &str, nodes: &'a [Node], id: usize) -> Result
 
 
 pub fn get_num_node<'a, T: FromStr>(tag_name: &str, nodes: &'a [Node], id: usize) -> Result<T, String> {
-  try!(get_text_node(tag_name, nodes, id))
+  r#try!(get_text_node(tag_name, nodes, id))
     .parse::<T>()
     .map_err(|_| "Invalid number".to_string())
 }

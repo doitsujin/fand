@@ -6,8 +6,8 @@ pub mod parser;
 pub mod sensor;
 pub mod util;
 
-use app::{ App, Config };
-use parser::Parser;
+use crate::app::{ App, Config };
+use crate::parser::Parser;
 
 use std::io::Write;
 use std::path::Path;
@@ -18,11 +18,11 @@ fn global_config_path() -> Result<String, String> {
 }
 
 fn run_app() -> Result<(), String> {
-  let config_path = try!(global_config_path());
-  let content     = try!(util::read_text_file(&Path::new(&config_path)));
+  let config_path = r#try!(global_config_path());
+  let content     = r#try!(util::read_text_file(&Path::new(&config_path)));
   
-  let config = try!(Parser::parse_document(&content));
-  let mut app = App::from_config(try!(Config::parse(&config)));
+  let config = r#try!(Parser::parse_document(&content));
+  let mut app = App::from_config(r#try!(Config::parse(&config)));
   app.run()
 }
 

@@ -1,9 +1,9 @@
 use std::cmp;
 use std::path::{ Path, PathBuf };
-use parser::{ Evaluator, Node };
+use crate::parser::{ Evaluator, Node };
 
-use fan::Fan;
-use util;
+use crate::fan::Fan;
+use crate::util;
 
 // Hwmon PWM fan
 // 
@@ -62,7 +62,7 @@ impl EvalHwmonPwmFan {
 impl Evaluator<Box<Fan>> for EvalHwmonPwmFan {
   fn parse_nodes(&self, nodes: &[Node]) -> Result<Box<Fan>, String> {
     Ok(HwmonPwmFan::create(
-      try!(util::get_text_node("hwmon-pwm", nodes, 0)),
-      try!(util::get_text_node("hwmon-pwm", nodes, 1))))
+      r#try!(util::get_text_node("hwmon-pwm", nodes, 0)),
+      r#try!(util::get_text_node("hwmon-pwm", nodes, 1))))
   }
 }

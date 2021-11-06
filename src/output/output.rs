@@ -1,5 +1,5 @@
-use fan::Fan;
-use input::Input;
+use crate::fan::Fan;
+use crate::input::Input;
 
 pub struct Output {
   fan   : Box<Fan>,

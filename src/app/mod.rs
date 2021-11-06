@@ -1,5 +1,5 @@
 pub mod app;
 pub mod config;
 
-pub use app::app::App;
-pub use app::config::Config;
+pub use crate::app::app::App;
+pub use crate::app::config::Config;

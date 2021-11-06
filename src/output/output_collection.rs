@@ -1,4 +1,4 @@
-use output::Output;
+use crate::output::Output;
 
 pub struct OutputCollection {
   outputs : Vec<Output>,
@@ -15,14 +15,14 @@ impl OutputCollection {
   
   pub fn enable_all(&mut self, state: bool) -> Result<(), String> {
     for o in self.outputs.as_mut_slice() {
-      try!(o.set_enabled(state));
+      r#try!(o.set_enabled(state));
     }
     Ok(())
   }
   
   pub fn update_all(&mut self) -> Result<(), String> {
     for o in self.outputs.as_mut_slice() {
-      try!(o.update());
+      r#try!(o.update());
     }
     Ok(())
   }

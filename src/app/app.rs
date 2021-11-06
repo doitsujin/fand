@@ -1,10 +1,10 @@
-use output::OutputCollection;
-use sensor::SensorCollection;
+use crate::output::OutputCollection;
+use crate::sensor::SensorCollection;
 
 use std::thread;
 use std::time::Duration;
 
-use app::Config;
+use crate::app::Config;
 
 pub struct App {
   sensors : SensorCollection,
@@ -21,10 +21,10 @@ impl App {
   }
   
   pub fn run(&mut self) -> Result<(), String> {
-    try!(self.outputs.enable_all(true));
+    r#try!(self.outputs.enable_all(true));
     loop {
-      try!(self.sensors.update_all());
-      try!(self.outputs.update_all());
+      r#try!(self.sensors.update_all());
+      r#try!(self.outputs.update_all());
       thread::sleep(Duration::from_secs(1));
     }
   }
