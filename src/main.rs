@@ -1,3 +1,9 @@
+#[macro_use]
+extern crate lazy_static;
+
+#[macro_use]
+extern crate log;
+
 pub mod app;
 pub mod fan;
 pub mod input;
@@ -19,6 +25,8 @@ fn global_config_path() -> Result<String, String> {
 }
 
 fn run_app() -> Result<(), String> {
+    env_logger::init();
+    
     let config_path = global_config_path()?;
     let content = util::read_text_file(Path::new(&config_path))?;
 

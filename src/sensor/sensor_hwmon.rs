@@ -19,7 +19,13 @@ pub struct HwmonSensor {
 
 impl HwmonSensor {
     pub fn create(hwmon: &str, input: &str) -> Rc<RefCell<Box<dyn Sensor>>> {
-        let base_path = format!("/sys/class/hwmon/{}/{}", hwmon, input);
+        let base_path = if util::HWMON_NAME_TO_PATH.contains_key(hwmon) {
+            let hwmon_path = util::HWMON_NAME_TO_PATH.get(hwmon).expect("Hwmon label vanished between `contains_key` check and retrieval.");
+            format!("{}/{}", hwmon_path, input)
+        } else {
+            warn!("Using old fallback for hwmon-input '{}'", hwmon);
+            format!("/sys/class/hwmon/{}/{}", hwmon, input)
+        };
 
         let mut path_v = PathBuf::new();
         path_v.push(Path::new(&base_path));

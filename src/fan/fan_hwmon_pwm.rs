@@ -17,7 +17,13 @@ pub struct HwmonPwmFan {
 
 impl HwmonPwmFan {
     pub fn create(hwmon: &str, output: &str) -> Box<dyn Fan> {
-        let base_path_pwm = format!("/sys/class/hwmon/{}/{}", hwmon, output);
+        let base_path_pwm = if util::HWMON_NAME_TO_PATH.contains_key(hwmon) {
+            let hwmon_path = util::HWMON_NAME_TO_PATH.get(hwmon).expect("Hwmon label vanished between `contains_key` check and retrieval.");
+            format!("{}/{}", hwmon_path, output)
+        } else {
+            warn!("Using old fallback for hwmon-pwm '{}'", hwmon);
+            format!("/sys/class/hwmon/{}/{}", hwmon, output)
+        };
         let base_path_enable = format!("{}_enable", &base_path_pwm);
 
         let mut path_to_pwm_v = PathBuf::new();
@@ -34,13 +40,17 @@ impl HwmonPwmFan {
 
 impl Fan for HwmonPwmFan {
     fn set_enabled(&mut self, enabled: bool) -> Result<(), String> {
-        util::write_text_file(
-            &self.path_to_enable,
-            match enabled {
-                true => "1",
-                false => "0",
-            },
-        )
+        if self.path_to_enable.exists() {
+            util::write_text_file(
+                &self.path_to_enable,
+                match enabled {
+                    true => "1",
+                    false => "0",
+                },
+            )
+        } else {
+            Result::Ok(())
+        }
     }
 
     fn set(&mut self, v: f64) -> Result<(), String> {
